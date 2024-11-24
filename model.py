@@ -23,3 +23,17 @@ def load_custom_dataset(base_dir, image_size=(64, 64), validation_split=0.2, bat
     
     dataset = np.array(dataset)
     labels = np.array(labels)
+
+# Sınıf dağılımlarını yazdırma
+def print_class_distribution(train_labels, val_labels):
+    train_class_counts = Counter(train_labels)
+    val_class_counts = Counter(val_labels)
+    
+    print("Training set class distribution:")
+    print(f"Old: {train_class_counts[0]}, Ripe: {train_class_counts[1],Unripe: {train_class_counts[2],Rotten: {train_class_counts[3]}")
+    
+    print("\nValidation set class distribution:")
+    print(f"Old: {val_class_counts[0]}, Ripe: {val_class_counts[1],Unripe: {val_class_counts[2],Rotten: {val_class_counts[3]}")
+
+# Sınıf dengesini yazdırma
+print_class_distribution(train_labels, val_labels)
