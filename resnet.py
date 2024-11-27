@@ -74,28 +74,19 @@ history = model.fit(
     epochs=20,
     callbacks=[early_stopping])
 
-# Predict on a single test image
-from tensorflow.keras.preprocessing import image
-test_image = image.load_img("/content/drive/MyDrive/dataset_tomatoes/single_pred/u (2).jfif", target_size=(224, 224))
-test_image = image.img_to_array(test_image)
-test_image = np.expand_dims(test_image, axis=0) / 255.0
+# Predict on the entire test dataset
+test_predictions = model.predict(test_set)
+predicted_classes = np.argmax(test_predictions, axis=1)  # Predicted class indices
+true_classes = test_set.classes  # Ground truth class indices from test_set
 
-result = model.predict(test_image)
-
-# Map predictions to class labels
-class_indices = training_set.class_indices
+# Map class indices to class names
+class_indices = test_set.class_indices
 class_names = {v: k for k, v in class_indices.items()}
 
-predicted_class_index = np.argmax(result)
-predicted_class = class_names[predicted_class_index]
-print(f"Predicted class: {predicted_class}")
+# Calculate the confusion matrix
+cm = confusion_matrix(true_classes, predicted_classes)
 
-# Confusion Matrix
-test_labels = test_set.classes
-test_predictions = model.predict(test_set)
-predicted_classes = np.argmax(test_predictions, axis=1)
-
-cm = confusion_matrix(test_labels, predicted_classes)
+# Display the confusion matrix
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=list(class_names.values()))
 disp.plot(cmap=plt.cm.Blues)
 plt.title("Confusion Matrix")
